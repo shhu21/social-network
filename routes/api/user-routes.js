@@ -20,4 +20,8 @@ router
   .put(updateUser)
   .delete(deleteUser);
 
+// TODO: post to friend list
+
+// TODO: remove a friend from the friend list
+
 module.exports = router;
