@@ -1,32 +1,32 @@
 const router = require('express').Router();
 const {
+    getAllThoughts,
+    getThoughtById,
+    updateThoughtById,
     addThought,
     removeThought,
     addReaction,
     removeReaction
 } = require('../../controllers/thought-controller');
 
-// TODO: get all thoughts
-// router.route('/:userId').get(getAllThoughts);
+// get all thoughts
+router.route('/').get(getAllThoughts);
 
-// TODO: get thought by id
-// router.route('/:userId/:thoughtId').get(getThoughtById);
+// get thought by id
+router.route('/:id').get(getThoughtById);
 
-// TODO: update thought by id
-// router.route('/:userId/:thoughtId').put(updateThought);
+// update thought by id
+router.route('/:id').put(updateThoughtById);
 
 // /api/thoughts/<userId>
-router.route('/:userId').post(addThought);
+router.route('/').post(addThought);
 
-// /api/thoughts/<userId>/<thoughtId>
 router.route('/:userId/:thoughtId').delete(removeThought);
 
-// FIXME: might need to change the route
-router
-  .route('/:userId/:thoughtId')
-  .put(addReaction)
-  .delete(removeThought);
+router.route('/:thoughtId/reactions').post(addReaction);
 
-router.route('/:userId/:thoughtId/:reactionId').delete(removeReaction);
+router.route('/:thoughtId/reactions/:reactionId').delete(removeReaction);
 
 module.exports = router;
+
+// TODO: clean up routes

@@ -1,13 +1,59 @@
 const { Thought, User } = require('../models');
 
 const thoughtController = {
+    getAllThoughts(req, res) {
+        Thought.find({})
+        .populate({
+            path: 'reactions',
+            select: '-__v'
+        })
+        .select('-__v')
+        .sort({ _id: -1 })
+        .then(dbUserData => res.json(dbUserData))
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(400);
+        });
+    },
+
+    // get one thought by id
+    getThoughtById({ params }, res) {
+        Thought.findOne({ _id: params.id })
+        .populate({
+            path: 'reactions',
+            select: '-__v'
+        })
+        .select('-__v')
+        .then(dbUserData => res.json(dbUserData))
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(400);
+        });
+    },
+
+    // update thought by id
+    updateThoughtById({ params, body }, res) {
+        Thought.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
+        .then(dbUserData => {
+        if (!dbUserData) {
+            res.status(404).json({ message: 'No user found with this id!' });
+            return;
+        }
+        res.json(dbUserData);
+        })
+        .catch(err => res.json(err));
+    },
+
     // add thought to user
     addThought({ params, body }, res) {
         console.log(body);
-        Thought.create(body)
+        Thought.create({
+            thoughtText: body.thoughtText,
+            username: body.username
+        })
         .then(({ _id }) => {
             return User.findOneAndUpdate(
-                { _id: params.userId },
+                { _id: body.userId },
                 { $push: { thoughts: _id } },
                 { new: true }
             );
@@ -25,7 +71,7 @@ const thoughtController = {
     addReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
           { _id: params.thoughtId },
-          { $push: { replies: body } },
+          { $push: { reactions: body } },
           { new: true, runValidators: true }
         )
           .then(dbUserData => {

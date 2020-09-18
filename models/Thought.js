@@ -11,7 +11,7 @@ const ReactionSchema = new Schema(
     reactionBody: {
       type: String,
       required: true,
-      // max 280 characters
+      maxlength: 200
     },
     username: {
       type: String,
@@ -35,7 +35,8 @@ const ThoughtSchema = new Schema(
       thoughtText: {
         type: String,
         required: true,
-        // range between 1-280 characters
+        minlength: 1,
+        maxlength: 280
       },
       createdAt: {
         type: Date,
@@ -43,7 +44,6 @@ const ThoughtSchema = new Schema(
         get: createdAtVal => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a')
       },
       username: {
-        // FIXME: possibly wrong, might need Schema.Types.ObjectId
         type: String,
         required: true
       },
