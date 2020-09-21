@@ -53,7 +53,6 @@ const userController = {
     },
 
     // delete user
-    // TODO: bonus delete associated thoughts
     deleteUser({ params }, res) {
       User.findOneAndDelete({ _id: params.id })
       .then(dbUserData => {

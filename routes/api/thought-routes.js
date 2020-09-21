@@ -10,16 +10,17 @@ const {
 } = require('../../controllers/thought-controller');
 
 // get all thoughts
-router.route('/').get(getAllThoughts);
+// post a new thought
+router
+  .route('/')
+  .get(getAllThoughts)
+  .post(addThought);
 
-// get thought by id
-router.route('/:id').get(getThoughtById);
-
-// update thought by id
-router.route('/:id').put(updateThoughtById);
-
-// /api/thoughts/<userId>
-router.route('/').post(addThought);
+// get/update thought by id
+router
+  .route('/:id')
+  .get(getThoughtById)
+  .put(updateThoughtById);
 
 router.route('/:userId/:thoughtId').delete(removeThought);
 
@@ -28,5 +29,3 @@ router.route('/:thoughtId/reactions').post(addReaction);
 router.route('/:thoughtId/reactions/:reactionId').delete(removeReaction);
 
 module.exports = router;
-
-// TODO: clean up routes
